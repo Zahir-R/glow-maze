@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Light Up - A puzzle game where you illuminate a grid using limited light sources.">
+    <meta name="keywords" content="Glow Maze, puzzle game, grid, illuminate, light sources, torch, bulb, flashlight">
+    <link rel="stylesheet" href="./styles.css">
+    <title>Glow Maze - Puzzle Game of Light and Logic</title>
+</head>
+
+<body>
+    <h1>Glow Maze</h1>
+    <h2>Highlight every corner!</h2>
+
+    <main>
+        <div class="grid-section">
+            <section class="grid-board" id="grid-container"></section>
+    
+            <div id="light-selector" role="group" aria-label="Light source selector">
+                <button id="bulb-btn" aria-label="Select bulb as light source">
+                    <img src="images/bulb.webp" alt="Bulb icon for selecting light source">
+                    <span id="bulb-count" class="inventory-count">10</span>
+                </button>
+                <button id="flashlight-btn" aria-label="Select flashlight as light source">
+                    <img src="images/flashlight.webp" alt="Flashlight icon for selecting ligth source">
+                    <span id="flashlight-count" class="inventory-count">5</span>
+                </button>
+            </div>
+        </div>
+    
+        <div id="message-container"></div>    
+    
+        <section class="info" aria-label="Instructions">
+            <h2>How to play</h2>
+            <p>Each cell must be illuminated. Select the object you want to use and click on the cell to illuminate the surroundings.</p>
+            <p>There may be more than one solution to the puzzles, but try to use the least amount of luminous objects because they are limited.</p>
+        </section>
+    </main>
+    
+
+    <script src="script.js"></script>
+</body>
+</html>
