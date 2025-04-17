@@ -337,7 +337,7 @@ class Grid {
                 inventory.useBulb();
                 source = new Bulb(cell, this);
             } else {
-                showMessage("No more bulbs left!");
+                showMessage("No more light bulbs left!");
                 return;
             }
         } else if (this.selectedLightType === "flashlight") {
