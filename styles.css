@@ -161,9 +161,9 @@ img {
 
 .light-source-bulb {
     background-image: url('images/bulb.webp');
-    background-size: contain; /* Ensures the image fits within the element */
-    background-repeat: no-repeat; /* Prevents the image from repeating */
-    background-position: center; /* Centers the image within the element */
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 .light-source-flashlight{
