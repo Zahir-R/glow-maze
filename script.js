@@ -133,6 +133,7 @@ class Grid {
             if (inventory.flashlights > 0) {
                 inventory.useFlashlight();
                 source = new Flashlight(cell, this);
+
             } else {
                 showMessage("No more flashlights left!");
                 return;
@@ -204,6 +205,24 @@ class Grid {
             right: "left"
         };
         return opposites[direction];
+    }
+
+    // Iterate through every light source, if a bulb is encountered, return it, if a flashlight is encountered, return it
+    reloadLevel() {
+        this.lightSources.forEach(source => {
+            if (source instanceof Bulb) {
+                inventory.returnBulb();
+            } else if (source instanceof Flashlight) {
+                inventory.returnFlashlight();
+            }
+        });
+
+        // Clears the grid
+        this.clearLightSources();
+        this.clearHighlights();
+
+        // Sets the event listeners
+        grid.container.style.pointerEvents = 'auto';
     }
 }
 
@@ -372,11 +391,15 @@ class Flashlight extends LightSource {
     }
 
     rotateOrRemove() {
-        // It clears the current ilumination and rotates the flashlight to the next direction
+        // Clears the current illumination and rotates the flashlight to the next direction
         this.clearIllumination();
 
-        // Swithces to the next direction
+        // Switches to the next direction
         this.currentDirectionIndex++;
+
+        // Rotate the flashlight image by 90 degrees
+        const rotationAngle = this.currentDirectionIndex * 90;
+        this.cell.element.style.transform = `rotate(${rotationAngle}deg)`;
 
         // When the flashlight reaches the end of the directions array, it removes it
         if (this.currentDirectionIndex >= 4) {
@@ -548,7 +571,7 @@ class Inventory {
             grid.container.style.pointerEvents = "none";
 
             showMessage("You lost! Restarting the game...");
-            setTimeout(() => location.reload(), 4000); 
+            setTimeout(() => grid.reloadLevel(), 4000); 
         }
     }
 }
