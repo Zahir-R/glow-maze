@@ -60,16 +60,7 @@ glow-maze/
 
 ---
 
-
-## Contributing
-
-Contributions are welcome! If you'd like to improve the game, add new levels, or fix bugs, feel free to fork the repository and open a pull request. Whether it's a small tweak or a big feature, your input is appreciated!
-
 ## © Copyright
 
 © 2025 Zahir R. All rights reserved.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
