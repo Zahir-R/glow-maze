@@ -140,7 +140,7 @@ img {
 #flashlight-btn img{
     transform: rotate(-45deg);
     width: 100%;
-    height: 80%;
+    height: auto;
 }
 
 .cells {
