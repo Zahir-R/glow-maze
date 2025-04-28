@@ -81,6 +81,9 @@ class Grid {
         this.levelTransitionInProgress = false;
         const nextLevelId = this.currentLevelId + 1; // Increment the level ID
         this.currentLevelId = nextLevelId; // Update the current level ID
+        
+        // Update level counter
+        levelCounter.querySelector('span').textContent = `Level: ${grid.currentLevelId}`;
 
         this.clearLightSources();
 
@@ -214,6 +217,9 @@ class Grid {
                 inventory.returnBulb();
             } else if (source instanceof Flashlight) {
                 inventory.returnFlashlight();
+                if (source.flashlightElement) {
+                    source.flashlightElement.remove();
+                }
             }
         });
 
@@ -388,6 +394,13 @@ class Flashlight extends LightSource {
         this.currentDirectionIndex = 0; // Points to the right initially
         this.direction = this.directions[this.currentDirectionIndex];
         this.updateDirectionClass();
+
+        // Create a child element for the flashlight
+        this.flashlightElement = document.createElement("div");
+        this.flashlightElement.classList.add("flashlight-icon");
+        this.cell.element.appendChild(this.flashlightElement);
+
+        this.updateDirectionClass();
     }
 
     rotateOrRemove() {
@@ -399,7 +412,7 @@ class Flashlight extends LightSource {
 
         // Rotate the flashlight image by 90 degrees
         const rotationAngle = this.currentDirectionIndex * 90;
-        this.cell.element.style.transform = `rotate(${rotationAngle}deg)`;
+        this.flashlightElement.style.transform = `rotate(${rotationAngle}deg)`;
 
         // When the flashlight reaches the end of the directions array, it removes it
         if (this.currentDirectionIndex >= 4) {
@@ -410,13 +423,7 @@ class Flashlight extends LightSource {
         // Updates the direction to face the current direction of the flashlight
         this.direction = this.directions[this.currentDirectionIndex];
         this.updateDirectionClass();
-
-        // Checks if the cell has no light source, if true, it adds the light source class to the cell
-        if (!this.cell.isLightSource) {
-            this.cell.isLightSource = true;
-            this.cell.element.classList.add("light-source-flashlight");
-        }
-
+    
         this.illuminate();
     }
 
@@ -446,6 +453,7 @@ class Flashlight extends LightSource {
         this.cell.clear();
         this.cell.isLightSource = false;
         this.cell.element.classList.remove("light-source-flashlight");
+        this.flashlightElement.remove();
         this.grid.lightSources.delete(this.cell.index);
         inventory.returnFlashlight();
     }
@@ -562,16 +570,7 @@ class Inventory {
 
         // Check if the player has no bulbs or flashlights left
         if (this.bulbs === 0 && this.flashlights === 0) {
-            const lastLightSource = Array.from(grid.lightSources.values()).pop();  // Get the last light source from the Map lightSources
-            if (lastLightSource) {
-                lastLightSource.illuminate();
-            }
-
-            // Set the listeners to none
-            grid.container.style.pointerEvents = "none";
-
-            showMessage("You lost! Restarting the game...");
-            setTimeout(() => grid.reloadLevel(), 4000); 
+            showMessage("You are out of items! Open the ☰ menu to  restart the level or the game.");
         }
     }
 }
@@ -607,7 +606,54 @@ const grid = new Grid("grid-container", 10);
 grid.generate();
 
 grid.currentLevelId = 1;
+
+const levelCounter = document.getElementById('level-counter');
+levelCounter.innerHTML = `
+    <span>Level: ${grid.currentLevelId}</span>
+    <div id="options-menu" class="options-menu">
+        <div class="top-row"></div>
+        <div class="middle-row"></div>
+        <div class="bottom-row"></div>
+    </div>
+    <div class="help-menu"><p>?</p></div>
+`;
+
 loadLevel(grid.currentLevelId);
+
+document.getElementById('options-menu').addEventListener('click', () => {
+    document.getElementById('alpha').style = 'block';
+    document.getElementById('menu').style = 'block';
+});
+
+document.getElementById('restart-level').addEventListener('click', () => {
+    document.getElementById('alpha').style.display = 'none';
+    document.getElementById('menu').style.display = 'none';
+    grid.reloadLevel();
+});
+
+document.getElementById('restart-game').addEventListener('click', () => {
+    document.getElementById('alpha').style.display = 'none';
+    document.getElementById('menu').style.display = 'none';
+
+    inventory.bulbs = 10;
+    inventory.flashlights = 5;
+    inventory.updateUI();
+
+    grid.currentLevelId = 1;
+    grid.clearLightSources();
+    grid.clearHighlights();
+    grid.generate();
+    loadLevel(grid.currentLevelId); 
+
+    // Reset the level counter without overwriting the menu
+    const levelCounter = document.getElementById('level-counter');
+    levelCounter.querySelector('span').textContent = `Level: ${grid.currentLevelId}`;
+});
+
+document.getElementById('close-menu').addEventListener('click', () => {
+    document.getElementById('alpha').style.display = 'none';
+    document.getElementById('menu').style.display = 'none';
+});
 
 // Add event listeners to the bulb and flashlight buttons
 const bulbBtn = document.getElementById('bulb-btn');
