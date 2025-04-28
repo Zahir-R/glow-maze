@@ -14,6 +14,7 @@
     <h1>Glow Maze</h1>
     <h2>Highlight every corner!</h2>
 
+    <h3 id="level-counter"></h3>
     <main>
         <div class="grid-section">
             <section class="grid-board" id="grid-container"></section>
@@ -30,7 +31,16 @@
             </div>
         </div>
     
-        <div id="message-container"></div>    
+        <div id="message-container"></div>   
+        
+        <div id="alpha" style="display: none;" >
+            <div id="menu" style="display: none;">
+                <h2 id="menu-title">Menu</h2>
+                <button id="restart-level" class="menu-options">Restart Level</button>
+                <button id="restart-game" class="menu-options">Restart Game</button>
+                <button id="close-menu" class="menu-options">Close</button>
+            </div>
+        </div>
     
         <section class="info" aria-label="Instructions">
             <h2>How to play</h2>
