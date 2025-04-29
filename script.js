@@ -11,7 +11,11 @@ class Grid {
     }
 
     generate() {
-        // Clear the container and cells array
+            // First remove all existing listeners
+        this.cells.forEach(cell => {
+            cell.element.replaceWith(cell.element.cloneNode(true));
+        });
+
         this.container.innerHTML = "";
         this.cells = [];
 
@@ -39,7 +43,11 @@ class Grid {
 
     // Clear the highlight class from all cells
     clearHighlights() {
-        this.cells.forEach(cell => cell.clear());
+        this.cells.forEach(cell => {
+            if (cell.illuminatedBy.size > 0) {
+                cell.clear();
+            }
+        });
     }
 
     removeLightSource(cell) {
@@ -72,6 +80,9 @@ class Grid {
     // This is called when the level is loaded or when the player wins
     clearLightSources() {
         this.lightSources.forEach(source => {
+            if (source.flashlightElement) {
+                source.flashlightElement.remove();
+            }
             source.clear();
         });
         this.lightSources.clear();
@@ -578,10 +589,15 @@ class Inventory {
 const inventory = new Inventory();
 
 async function loadLevels() {
-    // Awaits the fetch request to get the levels.json file
-    const response = await fetch("levels.json");
-    const levels = await response.json();
-    return levels;
+    try {
+        const response = await fetch("levels.json");
+        if (!response.ok) throw new Error('Failed to load levels');
+        return await response.json();
+    } catch (error) {
+        console.error('Level loading error:', error);
+        showMessage("Failed to load levels. Please refresh.");
+        return []; // Return empty array as fallback
+    }
 }
 
 async function loadLevel(levelId) {
@@ -614,8 +630,12 @@ levelCounter.innerHTML = `
         <div class="top-row"></div>
         <div class="middle-row"></div>
         <div class="bottom-row"></div>
+        <div class="menu-label">Menu</div>
     </div>
-    <div class="help-menu"><p>?</p></div>
+    <div id="help-menu" class="help-menu">
+        <p>?</p>
+        <div class="help-label">Help</div>    
+    </div>
 `;
 
 loadLevel(grid.currentLevelId);
@@ -681,6 +701,9 @@ const showMessage = (msg) => {
         container.style.display = "none";
     }, 5000);
 }
+
+// Help carousel
+
 
 // When the user clicks on the bulb button, it sets the selected light type to "bulb"
 document.getElementById("bulb-btn").addEventListener("click", () => {
