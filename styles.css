@@ -34,14 +34,14 @@ h2 {
 }
 
 #level-counter {
-   display: flex;
-   justify-content: space-between;
-   align-items: center;
-   height: 4em;
-   width: 70%;
-   max-width: 500px;
-   margin: 0 auto;
-   padding: 0.5em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 4em;
+    width: 70%;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 0.5em;
 }
 
 #level-counter span {
@@ -62,6 +62,7 @@ h2 {
     gap: 2px;
     border-radius: 0.6em;
     position: relative;
+    left: -1em;
 }
 
 .menu-label {
@@ -125,6 +126,10 @@ h2 {
     cursor: pointer;
     color: #222;
     width: 50%;
+}
+
+.menu-options:hover {
+    background-color: #ccc8;
 }
 
 #menu-title {
