@@ -703,7 +703,7 @@ const showMessage = (msg) => {
 }
 
 // Help carousel
-
+// I have no idea of what I should do here
 
 // When the user clicks on the bulb button, it sets the selected light type to "bulb"
 document.getElementById("bulb-btn").addEventListener("click", () => {
