@@ -1,0 +1,511 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5em;
+    padding: 1em 0;
+    width: 100%;
+}
+
+html, body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    font-size: 18px;
+    background-color: #f8f8ff;
+}
+
+h1 {
+    margin-top: 2em;
+    text-align: center;
+}
+
+h2 {
+    margin-top: 1em;
+    text-align: center;
+}
+
+#level-counter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 4em;
+    width: 70%;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 0.5em;
+}
+
+#level-counter span {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.options-menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 2.6em;
+    height: 2.6em;
+    background-color: #ccc8;
+    box-sizing: border-box;
+    cursor: pointer;
+    gap: 2px;
+    border-radius: 0.6em;
+    position: relative;
+    left: -1em;
+}
+
+.menu-label {
+    position: absolute;
+    bottom: -1.2em;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    width: 100%;
+}
+
+.options-menu:hover {
+    background-color: #cccb;
+}
+
+.top-row, .middle-row, .bottom-row {
+    background-color: #333;
+    height: 14%;
+    width: 65%;
+    border-radius: 3px;
+    position: relative;
+}
+
+.top-row {
+    top: -0.2em;
+}
+
+.bottom-row {
+    top: 0.2em;
+}
+
+.menu-options {
+    padding: 0.8em;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    margin: calc(100vh / 10) auto;
+    font-size: 1.5em;
+    border-radius: 2em;
+    cursor: pointer;
+    color: #222;
+    width: 50%;
+}
+
+.menu-options:hover {
+    background-color: #ccc8;
+}
+
+#menu-title {
+    font-size: 2em;
+}
+
+.help-menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #ccc8;
+    height: 1.5em;
+    width: 1.5em;
+    border-radius: 50%;
+    font-size: 1.5em;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    position: relative;
+}
+
+.help-label {
+    position: absolute;
+    bottom: -1.5em;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    width: 100%;
+}
+
+.help-menu:hover {
+    background-color: #cccb;
+}
+
+.info {
+    width: 80%;
+    margin-bottom: 1em;
+}
+
+p {
+    text-align: left;
+    margin: 1em;
+}
+
+.grid-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5em;
+    width: 100%;
+    max-width: 500px;
+}
+
+.grid-board {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(10, 1fr);
+    justify-items: center;
+    align-items: center;
+    width: 100%;
+    max-width: 500px;
+    aspect-ratio: 1 / 1;
+    margin-bottom: 0;
+}
+
+img {
+    width: 30px;
+    height: auto;
+}
+
+#light-selector {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#light-selector button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    border: none;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+#light-selector button img {
+    display: block;
+}
+
+.inventory-count {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    background-color: #ccca;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 2px 5px;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#bulb-btn,
+#flashlight-btn {
+    background-color: #fffa;
+    border: 2px solid #333;
+    border-radius: 5px;
+    padding: 0 10px;
+    font-size: 16px;
+    color: white;
+    cursor: pointer;
+}
+
+#bulb-btn:hover,
+#flashlight-btn:hover {
+    background-color: #eeea;
+}
+
+#bulb-btn:active,
+#flashlight-btn:active {
+    background-color: #ddd;
+}
+
+#bulb-btn.selected,
+#flashlight-btn.selected {
+    background-color: #ff0a;
+    color: #fff;
+}
+
+#flashlight-btn img{
+    transform: rotate(-45deg);
+    width: 100%;
+    height: auto;
+}
+
+.cells {
+    width: 100%;
+    height: 100%;
+    background-color: #777;
+    border: black 1px solid;
+}
+
+.highlight {
+    background-color: #ff0a;
+}
+
+.light-source-bulb,
+.light-source-flashlight {
+    background-color: #ffaf;
+}
+
+.light-source-bulb {
+    background-image: url('images/bulb.webp');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.light-source-flashlight{
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.flashlight-icon {
+    width: 100%;
+    height: 100%;
+    background-image: url('images/flashlight.webp');;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    transform-origin: center;
+    pointer-events: none;
+}
+
+.wall-top {
+    border-top: 4px solid #333;
+}
+.wall-right {
+    border-right: 4px solid #333;
+}
+.wall-bottom {
+    border-bottom: 4px solid #333;
+}
+.wall-left {
+    border-left: 4px solid #333;
+}
+
+#message-container {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333c;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 16px;
+    z-index: 1000;
+    display: none;
+    transition: opacity 0.3s ease;
+}
+
+/* Help Modal Styles */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 998;
+}
+
+.modal-content {
+    position: fixed;
+    top: 10%;
+    left: 30%;
+    height: 80%;
+    width: 40%;
+    background-color: #f8f8ff;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 2em;
+    border-radius: 10px;
+    max-width: 700px;
+    max-height: 90vh;
+    overflow-y: auto;
+    z-index: 999;
+}
+
+.close-modal {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 1.5em;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.prev-slide, .next-slide {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 2em;
+    background: #333c;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+}
+
+.prev-slide {
+    left: 15px;
+}
+
+.next-slide {
+    right: 15px;
+}
+
+.explanation {
+    padding: 1em;
+    text-align: center;
+}
+
+.slide-indicators {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 1em;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #bbb;
+    cursor: pointer;
+}
+
+.dot.active {
+    background-color: #333;
+}
+
+#help-grid-container {
+    max-width: 80%;
+    margin: auto;
+}
+
+@media (max-width: 768px) {
+    html, body {
+        font-size: 14px;
+    }
+
+    h1 {
+        margin-top: 2em;
+    }
+
+    section {
+        width: 90%;
+    }
+
+    .grid-board {
+        grid-template-columns: repeat(10, 1fr);
+        grid-template-rows: repeat(10, 1fr);
+        margin: 10px auto;
+        justify-items: center;
+        align-items: center;
+        justify-content: center;
+        width: 80%;
+        aspect-ratio: 1 / 1;
+    }
+
+    .inventory-count {
+        font-size: 10px;
+        width: 15px;
+        height: 15px;
+    }
+
+    .modal-content {
+        left: 10%;
+        width: 80%;
+    }
+
+    .next-slide, .prev-slide {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+@media (max-width: 480px) {
+    html, body {
+        font-size: 14px;
+    }
+
+    h1 {
+        margin-top: 1em;
+    }
+
+    section {
+        width: 90%;
+    }
+
+    .grid-board {
+        grid-template-columns: repeat(10, 1fr);
+        grid-template-rows: repeat(10, 1fr);
+        margin: 10px auto;
+    }
+
+    #light-selector button {
+        width: 50px;
+        height: 50px;
+    }
+
+    .inventory-count {
+        font-size: 10px;
+        width: 14px;
+        height: 14px;
+    }
+
+    .modal-content {
+        left: 10%;
+        width: 80%;
+    }
+
+    .next-slide, .prev-slide {
+        width: 35px;
+        height: 35px;
+    }
+}

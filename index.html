@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Light Up - A puzzle game where you illuminate a grid using limited light sources.">
+    <meta name="keywords" content="Glow Maze, puzzle game, grid, illuminate, light sources, torch, bulb, flashlight">
+    <link rel="stylesheet" href="./styles.css">
+    <link rel="icon" href="images/bulb.webp" type="image/webp">
+    <title>Glow Maze - Puzzle Game of Light and Logic</title>
+</head>
+
+<body>
+    <h1>Glow Maze</h1>
+    <h2>Highlight every corner!</h2>
+
+    <h3 id="level-counter"></h3>
+    <main>
+        <div class="grid-section">
+            <section class="grid-board" id="grid-container"></section>
+    
+            <div id="light-selector" role="group" aria-label="Light source selector">
+                <button id="bulb-btn" aria-label="Select bulb as light source">
+                    <img src="images/bulb.webp" alt="Bulb icon for selecting light source">
+                    <span id="bulb-count" class="inventory-count">10</span>
+                </button>
+                <button id="flashlight-btn" aria-label="Select flashlight as light source">
+                    <img src="images/flashlight.webp" alt="Flashlight icon for selecting ligth source">
+                    <span id="flashlight-count" class="inventory-count">5</span>
+                </button>
+            </div>
+        </div>
+    
+        <div id="message-container"></div>   
+        
+        <div class="modal-overlay" style="display: none;" >
+            <div class="modal-content" style="display: none;">
+                <h2 id="menu-title">Menu</h2>
+                <button id="restart-level" class="menu-options">Restart Level</button>
+                <button id="restart-game" class="menu-options">Restart Game</button>
+                <button id="close-menu" class="menu-options">Close</button>
+            </div>
+        </div>
+
+        <section class="info" aria-label="Instructions">
+            <h2>How to play</h2>
+            <p>Each cell must be illuminated to complete the level. Select the object you want to use and click on the cell to illuminate the surroundings.</p>
+            <p>Bulbs and Flashlights emit light differently: bulbs illuminate all adjacent cells around them, while flashlights shine in a straight line.</p>
+            <p>Tap or click on the objects to remove them. Clicking on the flashlights will rotate them 90 degrees.</p>
+            <p>There may be more than one solution to the puzzles, but try to use the least amount of luminous objects because they are limited.</p>
+        </section>
+
+        <div id="help-modal" class="modal" style="display: none;">
+            <div class="modal-overlay"></div>
+            <div class="modal-content">
+                <button class="close-modal">&times;</button>
+                <button class="prev-slide">&lt;</button>
+                <button class="next-slide">&gt;</button>
+
+                <div class="slide">
+                    <div id="help-grid-container" class="grid-board"></div>
+                    <div class="explanation">
+                        <h3>Light Sources</h3>
+                        <p id="slide-explanation">Bulbs illuminate adjacent cells in all directions. Flashlights shine in a straight line and can be rotated.</p>
+                    </div>
+                </div>
+
+                <div class="slide-indicators">
+                    <span class="dot active"></span>
+                    <span class="dot"></span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="./js/main.js"></script>
+</body>
+</html>
