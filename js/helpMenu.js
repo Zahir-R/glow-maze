@@ -23,8 +23,20 @@ class HelpModal {
 
     setupEventListeners() {
         this.closeBtn.addEventListener('click', () => this.close());
-        this.prevBtn.addEventListener('click', () => this.showSlide(this.currentSlide - 1));
-        this.nextBtn.addEventListener('click', () => this.showSlide(this.currentSlide + 1));
+        this.prevBtn.addEventListener('click', () => {
+            if (this.currentSlide === 0) {
+                this.showSlide(2);
+            } else {
+                this.showSlide(this.currentSlide - 1);
+            }
+        });
+        this.nextBtn.addEventListener('click', () => {
+            if (this.currentSlide === 2) {
+                this.showSlide(0);
+            } else {
+                this.showSlide(this.currentSlide + 1);
+            }
+        });
 
         this.dots.forEach((dot, index) => {
             dot.addEventListener('click', () => this.showSlide(index));
@@ -48,14 +60,15 @@ class HelpModal {
 
     showSlide(slideIndex) {
         this.clearAnimations();
-        slideIndex = Math.max(0, Math.min(slideIndex, this.dots.length - 1));
+        if (slideIndex < 0) slideIndex = 2;
+        if (slideIndex > 2) slideIndex = 0;
         this.currentSlide = slideIndex;
 
         this.dots.forEach((dot, i) => {
             dot.classList.toggle('active', i === slideIndex);
         });
         this.gridContainer.innerHTML = '';
-        
+
         if (slideIndex === 0) {
             this.slideExplanation.innerHTML = `
             <h3>Light Sources</h3>
@@ -65,7 +78,7 @@ class HelpModal {
             <p>• Tap or click on objects to remove them</p>
             `;
             this.initLightSourcesDemo();
-        } else {
+        } else if (slideIndex === 1) {
             this.slideExplanation.innerHTML = `
             <h3>Walls & Obstacles</h3>
             <p>• Walls block light from passing through</p>
@@ -74,6 +87,15 @@ class HelpModal {
             <p>• Light doesn't pass through corners</p>
             `;
             this.initWallsDemo();
+        } else if (slideIndex === 2) {
+            this.slideExplanation.innerHTML = `
+            <h3>Items</h3>
+            <p>• Every completed level will grant you 6 light bulbs and 3 flashlights</p>
+            <p>• After level completion, half of the used items are returned to your inventory</p>
+            <p>• Use your items wisely, as they are limited!</p>
+            <p>• For example, this grid uses 9 light bulbs, and 3 flashlights, then the recovery would be: <br> 9 / 2 = 4.5 = 5 (+6 for level completion) light bulbs, and <br> 3 / 2 = 1.5 = 2 (+3 for level completion) flashlights</p>
+            `;
+            this.initItemsDemo();
         }
     }
 
@@ -135,6 +157,37 @@ class HelpModal {
         });
     }
 
+    initItemsDemo() {
+        this.helpGrid = new Grid('help-grid-container', 10, false);
+        this.helpGrid.generate();
+    
+        loadLevel(this.helpGrid, 1).then(() => {
+            const bulbCells = [11, 14, 17, 41, 44, 47, 71, 74, 77];
+            bulbCells.forEach(idx => {
+                const bulbCell = this.helpGrid.cells[idx];
+                const bulb = new Bulb(bulbCell, this.helpGrid);
+                bulb.illuminate();
+                this.helpGrid.lightSources.set(idx, bulb);
+            });
+
+            const flashlightConfigs = [
+                { idx: 90, directionIndex: 0 },
+                { idx: 9, directionIndex: 1 }, 
+                { idx: 99, directionIndex: 2 },
+                { idx: 59, directionIndex: 1 } 
+            ];
+            flashlightConfigs.forEach(cfg => {
+                const cell = this.helpGrid.cells[cfg.idx];
+                const flashlight = new Flashlight(cell, this.helpGrid);
+                flashlight.currentDirectionIndex = cfg.directionIndex;
+                flashlight.direction = flashlight.directions[flashlight.currentDirectionIndex];
+                flashlight.flashlightElement.style.transform = `rotate(${cfg.directionIndex * 90}deg)`;
+                flashlight.updateDirectionClass();
+                flashlight.illuminate();
+                this.helpGrid.lightSources.set(cfg.idx, flashlight);
+            });
+        });
+    }
     clearAnimations() {
         this.animationTimers.forEach(timer => {
             clearTimeout(timer);

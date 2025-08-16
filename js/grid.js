@@ -2,7 +2,7 @@ import { Cell } from './cell.js';
 import { Bulb } from './lights/bulb.js';
 import { Flashlight } from './lights/flashlight.js';
 import { inventory } from './inventory.js';
-import { getOppositeDirection, showMessage, loadLevel } from './utils.js';
+import { getOppositeDirection, showMessage, loadLevel, loadLevels } from './utils.js';
 
 export class Grid {
     constructor(containerId, size=10, interactive=true) {
@@ -68,9 +68,8 @@ export class Grid {
         const allCellsLit = this.cells.every(cell => cell.isLightSource || cell.illuminatedBy.size > 0);
         if (allCellsLit && !this.levelTransitionInProgress) {
             this.levelTransitionInProgress = true;
-            showMessage('You win! Moving to the next level...');
             this.container.style.pointerEvents = 'none';
-            setTimeout(() => this.loadNextLevel(), 5000);
+            this.loadNextLevel();
         }
     }
 
@@ -87,26 +86,36 @@ export class Grid {
     async loadNextLevel() {
         this.levelTransitionInProgress = false;
         const nextLevelId = this.currentLevelId + 1;
-        this.currentLevelId = nextLevelId;
+        
+        const levels = await loadLevels();
+        const level = levels.find(l => l.id === nextLevelId);
+        if (!level) {
+            showMessage('Congratulations! You completed the game!');
+            return;
+        }
+        showMessage('You win! Moving to the next level...');
 
-        document.querySelector('span').textContent = `Level: ${this.currentLevelId}`;
-        this.clearLightSources();
-        this.clearHighlights();
+        setTimeout(() => {
+            this.clearLightSources();
+            this.clearHighlights();
 
-        const initialBulbs = inventory.initialBulbs || 10;
-        const initialFlashlights = inventory.initialFlashlights || 5;
-        const usedBulbs = initialBulbs - inventory.bulbs;
-        const usedFlashlights = initialFlashlights - inventory.flashlights;
+            const initialBulbs = inventory.initialBulbs || 10;
+            const initialFlashlights = inventory.initialFlashlights || 5;
+            const usedBulbs = initialBulbs - inventory.bulbs;
+            const usedFlashlights = initialFlashlights - inventory.flashlights;
 
-        inventory.addBulbs(Math.ceil(usedBulbs / 2) + 6);
-        inventory.addFlashlights(Math.ceil(usedFlashlights / 2) + 3);
-        inventory.initialBulbs = inventory.bulbs;
-        inventory.initialFlashlights = inventory.flashlights;
+            inventory.addBulbs(Math.ceil(usedBulbs / 2) + 6);
+            inventory.addFlashlights(Math.ceil(usedFlashlights / 2) + 3);
+            inventory.initialBulbs = inventory.bulbs;
+            inventory.initialFlashlights = inventory.flashlights;
 
-        this.container.style.pointerEvents = 'auto';
+            this.container.style.pointerEvents = 'auto';
 
-        this.generate();
-        await loadLevel(this, nextLevelId);
+            this.currentLevelId = nextLevelId;
+            document.querySelector('span').textContent = `Level: ${this.currentLevelId}`;
+            this.generate();
+            loadLevel(this, this.currentLevelId)
+        }, 5000);
     }
 
     illuminateFrom(cell) {

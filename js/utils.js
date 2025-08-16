@@ -35,9 +35,9 @@ export async function loadLevel(grid, levelId) {
         const level = levels.find(l => l.id === levelId);
 
         if (!level) {
-            showMessage('No more levels! You completed the game!');
+            showMessage('Congratulations! You completed the game!');
             return false;
-        }
+        } 
         level.walls.forEach(w => grid.addWall(w.index, w.direction));
         return true;
     } catch (error) {

@@ -6,26 +6,43 @@
     <meta name="description" content="Light Up - A puzzle game where you illuminate a grid using limited light sources.">
     <meta name="keywords" content="Glow Maze, puzzle game, grid, illuminate, light sources, torch, bulb, flashlight">
     <link rel="stylesheet" href="./styles.css">
-    <link rel="icon" href="images/bulb.webp" type="image/webp">
+    <link rel="icon" href="images/bulb-accent.png" type="image/png">
     <title>Glow Maze - Puzzle Game of Light and Logic</title>
 </head>
 
 <body>
-    <h1>Glow Maze</h1>
-    <h2>Highlight every corner!</h2>
+    <header>
+        <h1>Glow Maze</h1>
+        <h2>Highlight every corner!</h2>
+    </header>
 
-    <h3 id="level-counter"></h3>
     <main>
+        <div id="level-counter">
+            <span>Level: 1</span>
+            <div class="control-buttons">
+                <div id="options-menu" class="options-menu">
+                    <div class="top-row"></div>
+                    <div class="middle-row"></div>
+                    <div class="bottom-row"></div>
+                    <div class="menu-label">Menu</div>
+                </div>
+                <div id="help-menu" class="help-menu">
+                    <p>?</p>
+                    <div class="help-label">Help</div>    
+                </div>
+            </div>
+        </div>
+
         <div class="grid-section">
             <section class="grid-board" id="grid-container"></section>
     
             <div id="light-selector" role="group" aria-label="Light source selector">
                 <button id="bulb-btn" aria-label="Select bulb as light source">
-                    <img src="images/bulb.webp" alt="Bulb icon for selecting light source">
+                    <img src="images/bulb.png" alt="Bulb">
                     <span id="bulb-count" class="inventory-count">10</span>
                 </button>
                 <button id="flashlight-btn" aria-label="Select flashlight as light source">
-                    <img src="images/flashlight.webp" alt="Flashlight icon for selecting ligth source">
+                    <img src="images/flashlight.png" alt="Flashlight">
                     <span id="flashlight-count" class="inventory-count">5</span>
                 </button>
             </div>
@@ -33,12 +50,30 @@
     
         <div id="message-container"></div>   
         
-        <div class="modal-overlay" style="display: none;" >
+        <div class="modal-overlay" style="display: none;">
             <div class="modal-content" style="display: none;">
-                <h2 id="menu-title">Menu</h2>
-                <button id="restart-level" class="menu-options">Restart Level</button>
-                <button id="restart-game" class="menu-options">Restart Game</button>
-                <button id="close-menu" class="menu-options">Close</button>
+                <h2 class="menu-title">Game Menu</h2>
+                
+                <div class="menu-options">
+                    <button id="restart-level" class="menu-btn restart-level">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path d="M17.65,6.35C16.2,4.9 14.21,4 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20C15.73,20 18.84,17.45 19.73,14H17.65C16.83,16.33 14.61,18 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6C13.66,6 15.14,6.69 16.22,7.78L13,11H20V4L17.65,6.35Z"/>
+                        </svg>
+                        Restart Level
+                    </button>
+                    <button id="restart-game" class="menu-btn restart-game">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path d="M13,3H11V13H13V3M17.83,5.17L16.41,6.59C18.05,7.91 19,9.9 19,12A7,7 0 0,1 12,19C8.14,19 5,15.88 5,12C5,9.91 5.95,7.91 7.58,6.58L6.17,5.17C2.38,8.39 1.92,14.07 5.14,17.86C8.36,21.64 14.04,22.1 17.83,18.88C21.61,15.66 22.06,9.97 18.85,6.18L17.83,5.17Z"/>
+                        </svg>
+                        Restart Game
+                    </button>
+                    <button id="close-menu" class="menu-btn close">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"/>
+                        </svg>
+                        Close Menu
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -60,13 +95,13 @@
                 <div class="slide">
                     <div id="help-grid-container" class="grid-board"></div>
                     <div class="explanation">
-                        <h3>Light Sources</h3>
                         <p id="slide-explanation">Bulbs illuminate adjacent cells in all directions. Flashlights shine in a straight line and can be rotated.</p>
                     </div>
                 </div>
 
                 <div class="slide-indicators">
                     <span class="dot active"></span>
+                    <span class="dot"></span>
                     <span class="dot"></span>
                 </div>
             </div>
