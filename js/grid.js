@@ -122,13 +122,33 @@ export class Grid {
                     levelId: this.currentLevelId,
                     bulbs: inventory.bulbs,
                     flashlights: inventory.flashlights,
-                    selectedLightType: this.selectedLightType
+                    selectedLightType: this.selectedLightType,
+                    lightSources: this.lightSources
                 });
             };
             saveState();
         }, 5000);
     }
 
+    saveGameStateGrid() {
+    const stateToSave = {
+        levelId: this.currentLevelId,
+        bulbs: inventory.bulbs,
+        flashlights: inventory.flashlights,
+        selectedLightType: this.selectedLightType,
+        lightSources: Array.from(this.lightSources.entries()).map(([index, source]) => {
+            const data = {
+                cellIndex: index,
+                type: source.type
+            };
+            if (source.type === 'flashlight') {
+                data.directionIndex = source.currentDirectionIndex;
+            }
+            return data;
+        })
+    };
+    localStorage.setItem('gameState', JSON.stringify(stateToSave));
+}
     illuminateFrom(cell) {
         const existing = this.lightSources.get(cell.index);
 
@@ -136,12 +156,14 @@ export class Grid {
             if (this.selectedLightType === 'flashlight') {
                 existing.rotateOrRemove();
                 this.checkWinCondition();
+                this.saveGameStateGrid();
             }
             return;
         }
 
         if (cell.isLightSource) {
             this.removeLightSource(cell);
+            this.saveGameStateGrid();
             return;
         }
 
@@ -158,7 +180,6 @@ export class Grid {
             if (inventory.flashlights > 0) {
                 inventory.useFlashlight();
                 source = new Flashlight(cell, this);
-
             } else {
                 showMessage('No more flashlights left!');
                 return;
@@ -169,9 +190,27 @@ export class Grid {
             source.illuminate();
             this.lightSources.set(cell.index, source);
             this.checkWinCondition();
+            this.saveGameStateGrid();
         }
 
         inventory.checkGameOver(this);
+    }
+
+    loadLightSources(lightSourcesData) {
+        lightSourcesData.forEach(lightData => {
+            const cell = this.cells[lightData.cellIndex];
+
+            if (lightData.type === 'bulb') {
+                const bulb = new Bulb(cell, this);
+                bulb.illuminate();
+                this.lightSources.set(cell.index, bulb);
+            } else if (lightData.type === 'flashlight') {
+                const flashlight = new Flashlight(cell, this);
+                flashlight.setDirection(lightData.directionIndex);
+                flashlight.illuminate();
+                this.lightSources.set(cell.index, flashlight);
+            }
+        });
     }
 
     checkPathWithWalls(fromRow, fromCol, toRow, toCol) {

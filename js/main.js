@@ -16,7 +16,12 @@ window.addEventListener('DOMContentLoaded', () => {
         grid.selectedLightType = savedState.selectedLightType;
     }
     grid.generate();
-    loadLevel(grid, grid.currentLevelId);
+    loadLevel(grid, grid.currentLevelId).then(() => {
+        if (savedState && savedState.lightSources) {
+            grid.loadLightSources(savedState.lightSources);
+            grid.checkWinCondition();
+        }
+    });
 
     const levelCounter = document.getElementById('level-counter');
     levelCounter.innerHTML = `
@@ -50,7 +55,8 @@ window.addEventListener('DOMContentLoaded', () => {
             levelId: grid.currentLevelId,
             bulbs: inventory.bulbs,
             flashlights: inventory.flashlights,
-            selectedLightType: grid.selectedLightType
+            selectedLightType: grid.selectedLightType,
+            lightSources: grid.lightSources
         });
     };
 

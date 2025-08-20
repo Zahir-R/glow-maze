@@ -2,6 +2,11 @@ import { LightSource } from './lightSource.js';
 import { getOppositeDirection } from '../utils.js';
 
 export class Bulb extends LightSource {
+    constructor(cell, grid) {
+        super(cell, grid);
+        this.type = 'bulb';
+    }
+    
     illuminate() {
         const radius = 2;
         const row = Math.floor(this.cell.index / this.grid.size);

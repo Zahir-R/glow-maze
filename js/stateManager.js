@@ -1,6 +1,26 @@
 export const saveGameState = (state) => {
     try {
-        localStorage.setItem('gameState', JSON.stringify(state));
+        const lightSourcesData = Array.from(state.lightSources.entries()).map(([index, source]) => {
+            const data = {
+                cellIndex: index,
+                type: source.type
+            };
+
+            if (source.type === 'flashlight') {
+                data.directionIndex = source.currentDirectionIndex;
+            }
+            return data;
+        });
+
+        const stateToSave = {
+            levelId: state.levelId,
+            bulbs: state.bulbs,
+            flashlights: state.flashlights,
+            selectedLightType: state.selectedLightType,
+            lightSources: lightSourcesData
+        };
+
+        localStorage.setItem('gameState', JSON.stringify(stateToSave));
     } catch (error) {
         console.error('Error saving game state:', error);
     }

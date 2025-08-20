@@ -5,6 +5,7 @@ import { inventory } from '../inventory.js';
 export class Flashlight extends LightSource {
     constructor(cell, grid) {
         super(cell, grid);
+        this.type = 'flashlight';
         this.directions = ['right', 'bottom', 'left', 'top'];
         this.currentDirectionIndex = 0;
         this.direction = this.directions[this.currentDirectionIndex];
@@ -33,6 +34,17 @@ export class Flashlight extends LightSource {
         this.updateDirectionClass();
     
         this.illuminate();
+    }
+
+    setDirection(index) {
+        this.currentDirectionIndex = index;
+        this.direction = this.directions[index];
+        this.updateDirectionClass();
+
+        const rotationAngle = this.currentDirectionIndex * 90;
+        if (this.flashlightElement) {
+            this.flashlightElement.style.transform = (`rotate(${rotationAngle}deg)`);
+        }
     }
 
     clearIllumination() {
