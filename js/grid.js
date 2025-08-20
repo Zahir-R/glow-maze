@@ -3,6 +3,7 @@ import { Bulb } from './lights/bulb.js';
 import { Flashlight } from './lights/flashlight.js';
 import { inventory } from './inventory.js';
 import { getOppositeDirection, showMessage, loadLevel, loadLevels } from './utils.js';
+import { saveGameState } from './stateManager.js';
 
 export class Grid {
     constructor(containerId, size=10, interactive=true) {
@@ -114,7 +115,17 @@ export class Grid {
             this.currentLevelId = nextLevelId;
             document.querySelector('span').textContent = `Level: ${this.currentLevelId}`;
             this.generate();
-            loadLevel(this, this.currentLevelId)
+            loadLevel(this, this.currentLevelId);
+
+            const saveState = () => {
+                saveGameState({
+                    levelId: this.currentLevelId,
+                    bulbs: inventory.bulbs,
+                    flashlights: inventory.flashlights,
+                    selectedLightType: this.selectedLightType
+                });
+            };
+            saveState();
         }, 5000);
     }
 
