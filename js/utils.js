@@ -20,7 +20,7 @@ export const showMessage = (msg) => {
 
 export async function loadLevels() {
     try {
-        const response = await fetch('../levels.json');
+        const response = await fetch('./levels.json');
         if (!response.ok) throw new Error('Failed to load levels');
         return await response.json();
     } catch (error) {
