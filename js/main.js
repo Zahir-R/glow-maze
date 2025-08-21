@@ -19,7 +19,7 @@ window.addEventListener('DOMContentLoaded', () => {
     loadLevel(grid, grid.currentLevelId).then(() => {
         if (savedState && savedState.lightSources) {
             grid.loadLightSources(savedState.lightSources);
-            grid.checkWinCondition();
+            //grid.checkWinCondition();
         }
     });
 
