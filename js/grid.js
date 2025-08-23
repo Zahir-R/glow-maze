@@ -3,7 +3,7 @@ import { Bulb } from './lights/bulb.js';
 import { Flashlight } from './lights/flashlight.js';
 import { inventory } from './inventory.js';
 import { getOppositeDirection, showMessage, loadLevel, loadLevels } from './utils.js';
-import { saveGameState } from './stateManager.js';
+import { saveGameState, buildGameState } from './stateManager.js';
 
 export class Grid {
     constructor(containerId, size=10, interactive=true) {
@@ -118,37 +118,12 @@ export class Grid {
             loadLevel(this, this.currentLevelId);
 
             const saveState = () => {
-                saveGameState({
-                    levelId: this.currentLevelId,
-                    bulbs: inventory.bulbs,
-                    flashlights: inventory.flashlights,
-                    selectedLightType: this.selectedLightType,
-                    lightSources: this.lightSources
-                });
+                saveGameState(this.getCurrentState());
             };
             saveState();
         }, 5000);
     }
 
-    saveGameStateGrid() {
-    const stateToSave = {
-        levelId: this.currentLevelId,
-        bulbs: inventory.bulbs,
-        flashlights: inventory.flashlights,
-        selectedLightType: this.selectedLightType,
-        lightSources: Array.from(this.lightSources.entries()).map(([index, source]) => {
-            const data = {
-                cellIndex: index,
-                type: source.type
-            };
-            if (source.type === 'flashlight') {
-                data.directionIndex = source.currentDirectionIndex;
-            }
-            return data;
-        })
-    };
-    localStorage.setItem('gameState', JSON.stringify(stateToSave));
-}
     illuminateFrom(cell) {
         const existing = this.lightSources.get(cell.index);
 
@@ -156,14 +131,14 @@ export class Grid {
             if (this.selectedLightType === 'flashlight') {
                 existing.rotateOrRemove();
                 this.checkWinCondition();
-                this.saveGameStateGrid();
+                saveGameState(this.getCurrentState());
             }
             return;
         }
 
         if (cell.isLightSource) {
             this.removeLightSource(cell);
-            this.saveGameStateGrid();
+            saveGameState(this.getCurrentState());
             return;
         }
 
@@ -190,10 +165,20 @@ export class Grid {
             source.illuminate();
             this.lightSources.set(cell.index, source);
             this.checkWinCondition();
-            this.saveGameStateGrid();
+            saveGameState(this.getCurrentState());;
         }
 
         inventory.checkGameOver(this);
+    }
+
+    getCurrentState() {
+        return buildGameState(
+            this.currentLevelId,
+            inventory.bulbs,
+            inventory.flashlights,
+            this.selectedLightType,
+            this.lightSources
+        );
     }
 
     loadLightSources(lightSourcesData) {

@@ -2,7 +2,7 @@ import { Grid } from './grid.js';
 import { inventory } from './inventory.js';
 import { loadLevel } from './utils.js';
 import { helpModal } from './helpMenu.js';
-import { saveGameState, loadGameState, clearGameState } from './stateManager.js';
+import { saveGameState, loadGameState, clearGameState, buildGameState } from './stateManager.js';
 
 window.addEventListener('DOMContentLoaded', () => {
     const savedState = loadGameState();
@@ -51,13 +51,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     const saveState = () => {
-        saveGameState({
-            levelId: grid.currentLevelId,
-            bulbs: inventory.bulbs,
-            flashlights: inventory.flashlights,
-            selectedLightType: grid.selectedLightType,
-            lightSources: grid.lightSources
-        });
+        saveGameState(grid.getCurrentState());
     };
 
     document.getElementById('options-menu').addEventListener('click', () => {
