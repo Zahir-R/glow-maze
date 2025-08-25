@@ -8,6 +8,8 @@ export class Inventory {
         if (inventoryContainer) {
             inventoryContainer.remove();
         }
+        this.initialBulbs = 10;
+        this.initialFlashlights = 5;
     }
 
     useBulb() {

@@ -62,26 +62,34 @@ window.addEventListener('DOMContentLoaded', () => {
     document.getElementById('restart-level').addEventListener('click', () => {
         document.querySelector('.modal-overlay').style.display = 'none';
         document.querySelector('.modal-content').style.display = 'none';
+        grid.cancelLevelTransition();
         grid.reloadLevel();
-        saveState();
+        saveGameState(grid.getCurrentState());
     });
 
     document.getElementById('restart-game').addEventListener('click', () => {
         document.querySelector('.modal-overlay').style.display = 'none';
         document.querySelector('.modal-content').style.display = 'none';
 
-        inventory.bulbs = 10;
-        inventory.flashlights = 5;
-        inventory.updateUI();
+        grid.cancelLevelTransition();
 
         grid.currentLevelId = 1;
         grid.clearLightSources();
         grid.clearHighlights();
+
+        inventory.initialBulbs = 10;
+        inventory.initialFlashlights = 5;
+        inventory.bulbs = 10;
+        inventory.flashlights = 5;
+        inventory.updateUI();
+
         grid.generate();
         loadLevel(grid, grid.currentLevelId); 
 
         levelCounter.querySelector('span').textContent = `Level: ${grid.currentLevelId}`;
         clearGameState();
+        grid.container.style.pointerEvents = 'auto';
+        saveGameState(grid.getCurrentState());
     });
 
     document.getElementById('close-menu').addEventListener('click', () => {

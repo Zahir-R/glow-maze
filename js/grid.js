@@ -15,6 +15,7 @@ export class Grid {
         this.levelTransitionInProgress = false;
         this.currentLevelId = 1;
         this.interactive = interactive;
+        this.transitionTimeout = null;
     }
 
     generate() {
@@ -85,18 +86,20 @@ export class Grid {
     }
 
     async loadNextLevel() {
-        this.levelTransitionInProgress = false;
+        this.cancelLevelTransition();
+        this.levelTransitionInProgress = true;
         const nextLevelId = this.currentLevelId + 1;
         
         const levels = await loadLevels();
         const level = levels.find(l => l.id === nextLevelId);
         if (!level) {
             showMessage('Congratulations! You completed the game!');
+            this.levelTransitionInProgress = false;
             return;
         }
         showMessage('You win! Moving to the next level...');
 
-        setTimeout(() => {
+        this.transitionTimeout = setTimeout(() => {
             this.clearLightSources();
             this.clearHighlights();
 
@@ -121,6 +124,7 @@ export class Grid {
                 saveGameState(this.getCurrentState());
             };
             saveState();
+            this.transitionTimeout = null;
         }, 5000);
     }
 
@@ -235,7 +239,16 @@ export class Grid {
         if (dRow === 0 && dCol === 1) return 'right';
     }
 
+    cancelLevelTransition() {
+        if (this.transitionTimeout) {
+            clearTimeout(this.transitionTimeout);
+            this.transitionTimeout = null;
+        }
+        this.levelTransitionInProgress = false;
+    }
+
     reloadLevel() {
+        this.cancelLevelTransition();
         this.lightSources.forEach(source => {
             if (source instanceof Bulb) {
                 inventory.returnBulb();
