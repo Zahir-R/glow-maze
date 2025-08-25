@@ -120,6 +120,8 @@ export class Grid {
             this.generate();
             loadLevel(this, this.currentLevelId);
 
+            this.levelTransitionInProgress = false;
+
             const saveState = () => {
                 saveGameState(this.getCurrentState());
             };
