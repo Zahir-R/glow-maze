@@ -90,10 +90,10 @@ class HelpModal {
         } else if (slideIndex === 2) {
             this.slideExplanation.innerHTML = `
             <h3>Items</h3>
-            <p>• Every completed level will grant you 6 light bulbs and 3 flashlights</p>
+            <p>• Every completed level will grant you 8 light bulbs and 4 flashlights</p>
             <p>• After level completion, half of the used items are returned to your inventory</p>
             <p>• Use your items wisely, as they are limited!</p>
-            <p>• For example, this grid uses 9 light bulbs, and 4 flashlights, then the recovery would be: <br> 9 / 2 = 4.5 = 5 (+6 for level completion) light bulbs, and <br> 4 / 2 = 2 (+3 for level completion) flashlights</p>
+            <p>• For example, this grid uses 9 light bulbs, and 4 flashlights, then the recovery would be: <br> 9 / 2 = 4.5 = 5 (+8 for level completion) light bulbs, and <br> 4 / 2 = 2 (+4 for level completion) flashlights</p>
             `;
             this.initItemsDemo();
         }

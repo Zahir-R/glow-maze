@@ -108,8 +108,8 @@ export class Grid {
             const usedBulbs = initialBulbs - inventory.bulbs;
             const usedFlashlights = initialFlashlights - inventory.flashlights;
 
-            inventory.addBulbs(Math.ceil(usedBulbs / 2) + 6);
-            inventory.addFlashlights(Math.ceil(usedFlashlights / 2) + 3);
+            inventory.addBulbs(Math.ceil(usedBulbs / 2) + 8);
+            inventory.addFlashlights(Math.ceil(usedFlashlights / 2) + 4);
             inventory.initialBulbs = inventory.bulbs;
             inventory.initialFlashlights = inventory.flashlights;
 
